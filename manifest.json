@@ -1,0 +1,10 @@
+{
+  "id": "cipher-graph-view",
+  "name": "Cipher Graph View",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "A futuristic neon 3D graph view for your Obsidian vault.",
+  "author": "Cipher / Dominic",
+  "authorUrl": "https://github.com/digidomic",
+  "isDesktopOnly": true
+}

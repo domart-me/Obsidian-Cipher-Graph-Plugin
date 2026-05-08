@@ -1,0 +1,129 @@
+:root {
+  --cipher-bg: #02030a;
+  --cipher-cyan: #00f5ff;
+  --cipher-pink: #ff2bd6;
+  --cipher-violet: #8b5cf6;
+  --cipher-green: #39ff88;
+}
+
+.cipher-graph-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(0, 245, 255, 0.18), transparent 28%),
+    radial-gradient(circle at 80% 80%, rgba(255, 43, 214, 0.16), transparent 30%),
+    linear-gradient(135deg, #02030a 0%, #07111f 46%, #12041c 100%);
+  color: #dffcff;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.cipher-graph-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 245, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.07) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at center, black, transparent 78%);
+  animation: cipher-grid-drift 16s linear infinite;
+  z-index: 1;
+}
+
+.cipher-graph-root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.035) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.24;
+  z-index: 3;
+}
+
+.cipher-graph-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.cipher-graph-toolbar {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 5;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid rgba(0, 245, 255, 0.35);
+  border-radius: 16px;
+  background: rgba(2, 3, 10, 0.54);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.18), inset 0 0 20px rgba(139, 92, 246, 0.08);
+}
+
+.cipher-graph-title {
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cipher-cyan);
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.9), 0 0 24px rgba(255, 43, 214, 0.45);
+  margin-right: auto;
+}
+
+.cipher-graph-stat {
+  color: rgba(223, 252, 255, 0.82);
+  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.cipher-graph-button,
+.cipher-graph-search {
+  border: 1px solid rgba(0, 245, 255, 0.45);
+  color: #dffcff;
+  background: rgba(0, 245, 255, 0.08);
+  border-radius: 999px;
+  padding: 6px 12px;
+  box-shadow: 0 0 14px rgba(0, 245, 255, 0.12);
+}
+
+.cipher-graph-search {
+  min-width: 190px;
+}
+
+.cipher-graph-button:hover {
+  border-color: rgba(255, 43, 214, 0.75);
+  box-shadow: 0 0 18px rgba(255, 43, 214, 0.35);
+  transform: translateY(-1px);
+}
+
+.cipher-graph-empty {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: rgba(223, 252, 255, 0.8);
+  padding: 32px;
+}
+
+@keyframes cipher-grid-drift {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(44px, 44px, 0); }
+}
