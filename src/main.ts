@@ -45,11 +45,11 @@ export default class CipherGraphPlugin extends Plugin {
   async onload() {
     this.registerView(VIEW_TYPE_CIPHER_GRAPH, (leaf) => new CipherGraphView(leaf, this));
 
-    this.addRibbonIcon('network', 'Open Cipher Graph View', () => this.activateView());
+    this.addRibbonIcon('network', 'Open Cipher Graph', () => this.activateView());
 
     this.addCommand({
-      id: 'open-cipher-graph-view',
-      name: 'Open Cipher Graph View',
+      id: 'open',
+      name: 'Open Cipher Graph',
       callback: () => this.activateView(),
     });
 
@@ -79,8 +79,6 @@ export default class CipherGraphPlugin extends Plugin {
 class CipherGraphView extends ItemView {
   private graph: any;
   private graphEl!: HTMLDivElement;
-  private statsEl!: HTMLSpanElement;
-  private searchEl!: HTMLInputElement;
   private emptyEl!: HTMLDivElement;
   private resizeObserver?: ResizeObserver;
 
@@ -105,17 +103,6 @@ class CipherGraphView extends ItemView {
     container.empty();
 
     const root = container.createDiv({ cls: 'cipher-graph-root' });
-    const toolbar = root.createDiv({ cls: 'cipher-graph-toolbar' });
-    toolbar.createDiv({ cls: 'cipher-graph-title', text: 'Cipher Graph' });
-    this.statsEl = toolbar.createSpan({ cls: 'cipher-graph-stat', text: 'Scanning vault…' });
-
-    this.searchEl = toolbar.createEl('input', {
-      cls: 'cipher-graph-search',
-      attr: { placeholder: 'Fokus: Note suchen…' },
-    });
-
-    const resetButton = toolbar.createEl('button', { cls: 'cipher-graph-button', text: 'Reset View' });
-    const refreshButton = toolbar.createEl('button', { cls: 'cipher-graph-button', text: 'Refresh' });
 
     this.graphEl = root.createDiv({ cls: 'cipher-graph-canvas' });
     this.emptyEl = root.createDiv({ cls: 'cipher-graph-empty' });
@@ -126,12 +113,12 @@ class CipherGraphView extends ItemView {
       .backgroundColor('rgba(0,0,0,0)')
       .nodeRelSize(5)
       .nodeOpacity(0.95)
-      .linkOpacity(0.38)
-      .linkWidth((link: any) => link.__highlight ? 2.8 : 0.7)
-      .linkDirectionalParticles((link: any) => link.__highlight ? 6 : 1)
-      .linkDirectionalParticleWidth((link: any) => link.__highlight ? 2.4 : 0.8)
-      .linkDirectionalParticleSpeed(0.004)
-      .linkColor((link: CipherLink) => link.color || 'rgba(0,245,255,0.55)')
+      .linkOpacity(0.78)
+      .linkWidth((link: any) => link.__highlight ? 3.0 : 1.2)
+      .linkDirectionalParticles((link: any) => link.__highlight ? 6 : 2)
+      .linkDirectionalParticleWidth((link: any) => link.__highlight ? 2.6 : 1.2)
+      .linkDirectionalParticleSpeed(0.005)
+      .linkColor((link: CipherLink) => link.color || 'rgba(0,245,255,0.85)')
       .nodeThreeObject((node: CipherNode) => this.createNodeObject(node))
       .onNodeClick((node: CipherNode) => this.openNote(node))
       .onNodeHover((node: CipherNode | null) => {
@@ -139,19 +126,16 @@ class CipherGraphView extends ItemView {
       });
 
     const scene = this.graph.scene();
-    scene.fog = new THREE.FogExp2(0x02030a, 0.012);
 
-    const bloomLight = new THREE.PointLight(0x00f5ff, 2.2, 420);
+    scene.add(new THREE.AmbientLight(0x334466, 0.55));
+
+    const bloomLight = new THREE.PointLight(0x00f5ff, 2.8, 0);
     bloomLight.position.set(80, 60, 120);
     scene.add(bloomLight);
 
-    const magentaLight = new THREE.PointLight(0xff2bd6, 1.6, 380);
+    const magentaLight = new THREE.PointLight(0xff2bd6, 2.0, 0);
     magentaLight.position.set(-120, -80, 90);
     scene.add(magentaLight);
-
-    resetButton.onclick = () => this.zoomToFit();
-    refreshButton.onclick = () => this.renderGraph();
-    this.searchEl.oninput = () => this.applySearchFocus();
 
     this.resizeObserver = new ResizeObserver(() => {
       this.graph.width(this.graphEl.clientWidth);
@@ -169,10 +153,9 @@ class CipherGraphView extends ItemView {
 
   async renderGraph() {
     const data = this.buildGraphData();
-    this.statsEl.setText(`${data.nodes.length} Notes · ${data.links.length} Links`);
 
     if (data.nodes.length === 0) {
-      this.emptyEl.setText('Keine Markdown-Notes gefunden. Fütter den Vault, dann glüht das Ding.');
+      this.emptyEl.setText('No Markdown files found. Add some notes and the graph will light up.');
       this.emptyEl.show();
     } else {
       this.emptyEl.hide();
@@ -219,7 +202,7 @@ class CipherGraphView extends ItemView {
         links.push({
           source: file.path,
           target: target.path,
-          color: `${folderColor(file.parent?.path || 'root')}cc`,
+          color: folderColor(file.parent?.path || 'root'),
         });
       }
     }
@@ -235,7 +218,7 @@ class CipherGraphView extends ItemView {
     const coreMaterial = new THREE.MeshLambertMaterial({
       color: node.color,
       emissive: node.color,
-      emissiveIntensity: node.recent ? 1.4 : 0.8,
+      emissiveIntensity: node.recent ? 2.0 : 1.6,
       transparent: true,
       opacity: 0.92,
     });
@@ -266,7 +249,7 @@ class CipherGraphView extends ItemView {
   private async openNote(node: CipherNode) {
     const file = this.app.vault.getAbstractFileByPath(node.path);
     if (!(file instanceof TFile)) {
-      new Notice(`Note nicht gefunden: ${node.path}`);
+      new Notice(`Note not found: ${node.path}`);
       return;
     }
     await this.app.workspace.getLeaf('tab').openFile(file);
@@ -275,37 +258,5 @@ class CipherGraphView extends ItemView {
   private zoomToFit() {
     if (!this.graph) return;
     this.graph.zoomToFit(720, 80);
-  }
-
-  private applySearchFocus() {
-    const query = this.searchEl.value.trim().toLowerCase();
-    const data = this.graph.graphData() as CipherGraphData;
-
-    for (const node of data.nodes as any[]) {
-      node.__highlight = query && (node.name.toLowerCase().includes(query) || node.path.toLowerCase().includes(query));
-    }
-
-    for (const link of data.links as any[]) {
-      const source = typeof link.source === 'object' ? link.source : data.nodes.find((n) => n.id === link.source);
-      const target = typeof link.target === 'object' ? link.target : data.nodes.find((n) => n.id === link.target);
-      link.__highlight = Boolean(query && (source?.__highlight || target?.__highlight));
-    }
-
-    this.graph
-      .nodeOpacity((node: any) => !query || node.__highlight ? 1 : 0.22)
-      .linkOpacity((link: any) => !query || link.__highlight ? 0.72 : 0.08)
-      .linkWidth((link: any) => link.__highlight ? 2.8 : 0.7)
-      .linkDirectionalParticles((link: any) => link.__highlight ? 6 : 1);
-
-    const match = (data.nodes as any[]).find((node) => node.__highlight && Number.isFinite(node.x));
-    if (match) {
-      const distance = 72;
-      const distRatio = 1 + distance / Math.hypot(match.x, match.y, match.z);
-      this.graph.cameraPosition(
-        { x: match.x * distRatio, y: match.y * distRatio, z: match.z * distRatio },
-        match,
-        900,
-      );
-    }
   }
 }

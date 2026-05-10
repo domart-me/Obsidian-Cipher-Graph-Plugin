@@ -1,11 +1,11 @@
 :root {
-  --cipher-bg: #02030a;
   --cipher-cyan: #00f5ff;
   --cipher-pink: #ff2bd6;
   --cipher-violet: #8b5cf6;
   --cipher-green: #39ff88;
 }
 
+/* ── Dark mode (default) ────────────────────────────────── */
 .cipher-graph-root {
   position: relative;
   width: 100%;
@@ -28,7 +28,7 @@
     linear-gradient(rgba(0, 245, 255, 0.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 245, 255, 0.07) 1px, transparent 1px);
   background-size: 44px 44px;
-  mask-image: radial-gradient(circle at center, black, transparent 78%);
+  mask-image: radial-gradient(circle at center, black, transparent 96%);
   animation: cipher-grid-drift 16s linear infinite;
   z-index: 1;
 }
@@ -50,68 +50,41 @@
   z-index: 3;
 }
 
+/* ── Light mode overrides ──────────────────────────────── */
+body.theme-light .cipher-graph-root {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(0, 200, 250, 0.12), transparent 32%),
+    radial-gradient(circle at 80% 80%, rgba(180, 30, 210, 0.10), transparent 34%),
+    linear-gradient(135deg, #f0f3f8 0%, #e8ecf4 46%, #f5f0fa 100%);
+  color: #1a1a2e;
+}
+
+body.theme-light .cipher-graph-root::before {
+  background-image:
+    linear-gradient(rgba(60, 70, 130, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(60, 70, 130, 0.09) 1px, transparent 1px);
+}
+
+body.theme-light .cipher-graph-root::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.03),
+    rgba(0, 0, 0, 0.03) 1px,
+    transparent 1px,
+    transparent 5px
+  );
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+}
+
+/* ── Canvas ─────────────────────────────────────────────── */
 .cipher-graph-canvas {
   position: absolute;
   inset: 0;
   z-index: 2;
 }
 
-.cipher-graph-toolbar {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  right: 16px;
-  z-index: 5;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 12px 14px;
-  border: 1px solid rgba(0, 245, 255, 0.35);
-  border-radius: 16px;
-  background: rgba(2, 3, 10, 0.54);
-  backdrop-filter: blur(14px);
-  box-shadow: 0 0 30px rgba(0, 245, 255, 0.18), inset 0 0 20px rgba(139, 92, 246, 0.08);
-}
-
-.cipher-graph-title {
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--cipher-cyan);
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.9), 0 0 24px rgba(255, 43, 214, 0.45);
-  margin-right: auto;
-}
-
-.cipher-graph-stat {
-  color: rgba(223, 252, 255, 0.82);
-  font-size: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 999px;
-  padding: 5px 9px;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.cipher-graph-button,
-.cipher-graph-search {
-  border: 1px solid rgba(0, 245, 255, 0.45);
-  color: #dffcff;
-  background: rgba(0, 245, 255, 0.08);
-  border-radius: 999px;
-  padding: 6px 12px;
-  box-shadow: 0 0 14px rgba(0, 245, 255, 0.12);
-}
-
-.cipher-graph-search {
-  min-width: 190px;
-}
-
-.cipher-graph-button:hover {
-  border-color: rgba(255, 43, 214, 0.75);
-  box-shadow: 0 0 18px rgba(255, 43, 214, 0.35);
-  transform: translateY(-1px);
-}
-
+/* ── Empty state ────────────────────────────────────────── */
 .cipher-graph-empty {
   position: absolute;
   inset: 0;
@@ -123,6 +96,11 @@
   padding: 32px;
 }
 
+body.theme-light .cipher-graph-empty {
+  color: rgba(40, 40, 60, 0.75);
+}
+
+/* ── Grid animation ─────────────────────────────────────── */
 @keyframes cipher-grid-drift {
   from { transform: translate3d(0, 0, 0); }
   to { transform: translate3d(44px, 44px, 0); }

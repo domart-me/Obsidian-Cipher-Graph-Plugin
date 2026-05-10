@@ -1,92 +1,47 @@
 # Cipher Graph View
 
-Futuristische 3D-Neon-Graph-Ansicht für Obsidian. Cyberpunk fürs zweite Gehirn. 🌌
+A futuristic neon 3D graph view for Obsidian vaults.
+
+![Preview]()
 
 ## Features
 
-- Eigene Obsidian View: **Cipher Graph**
-- 3D Force Graph für alle Markdown-Notes im Vault
-- Neon Nodes nach Ordner/Cluster-Farbe
-- Grüne, größere Glow-Nodes für kürzlich bearbeitete Notes
-- Partikel auf Links
-- Such-/Fokusmodus
-- Klick auf Node öffnet die Note
-- Refresh- und Reset-Button
+- Custom Obsidian view: **Cipher Graph**
+- 3D force graph for all Markdown notes in the vault
+- Neon nodes colored by folder/cluster
+- Green glowing highlights for recently edited notes
+- Directional particles on links
+- Click a node to open the note
+- Auto-refresh on vault changes
 
-## Entwicklung
+## Installation
+
+### Manual
+
+1. Copy `main.js`, `manifest.json`, and `styles.css` into your vault's plugin folder:
+   `{vault}/.obsidian/plugins/cipher-graph-view/`
+2. In Obsidian, go to **Settings → Community plugins**.
+3. Disable **Restricted mode** if needed.
+4. Reload plugins and enable **Cipher Graph View**.
+5. Click the network icon in the ribbon or run `Open Cipher Graph` from the command palette.
+
+## Usage
+
+- **Click a node** to open the note
+- **Drag** to rotate, **scroll** to zoom
+
+## Development
 
 ```bash
-cd cipher-graph-view
 npm install
-npm run build
+npm run build  # production build
+npm run dev    # watch mode
 ```
 
-Für Watch-Modus:
+## License
 
-```bash
-npm run dev
-```
+[MIT](LICENSE)
 
-## Installation in Obsidian
+## Credits
 
-### Variante A: Manuell kopieren
-
-1. In Obsidian deinen Vault öffnen.
-2. Plugin-Ordner im Vault anlegen:
-
-```bash
-mkdir -p /pfad/zu/deinem/vault/.obsidian/plugins/cipher-graph-view
-```
-
-3. Diese Dateien aus dem Projektordner dorthin kopieren:
-
-```bash
-cp manifest.json main.js styles.css /pfad/zu/deinem/vault/.obsidian/plugins/cipher-graph-view/
-```
-
-4. Obsidian öffnen → **Settings → Community plugins**.
-5. Falls nötig: **Restricted mode** ausschalten.
-6. **Installed plugins** → Reload/Refresh drücken.
-7. **Cipher Graph View** aktivieren.
-8. Links in der Ribbon-Leiste auf das Netzwerk-Icon klicken oder Command Palette öffnen und suchen nach:
-   `Open Cipher Graph View`
-
-### Variante B: Symlink für Entwicklung
-
-Praktisch, wenn du am Plugin weiterbaust:
-
-```bash
-ln -s /home/dominic/.openclaw/workspace/cipher-graph-view /pfad/zu/deinem/vault/.obsidian/plugins/cipher-graph-view
-cd /home/dominic/.openclaw/workspace/cipher-graph-view
-npm run dev
-```
-
-Danach in Obsidian Plugin reloaden.
-
-## Dateien für Release
-
-Für eine lokale Installation braucht Obsidian nur:
-
-- `manifest.json`
-- `main.js`
-- `styles.css`
-
-## Bedienung
-
-- **Node klicken:** öffnet die Note
-- **Suche:** fokussiert passende Notes und ihre direkten Links
-- **Reset View:** zoomt wieder auf den ganzen Graph
-- **Refresh:** baut den Graph aus dem aktuellen Vault neu
-
-## Roadmap / geile nächste Ausbaustufen
-
-- Einstellungsseite für Farben, Glow und Partikel
-- Filter nach Ordnern, Tags und Dateinamen
-- Tag-Nodes als eigene Hubs
-- Timeline-Modus: Notes nach Änderungsdatum als „Memory Stream“
-- Bloom/Postprocessing für noch mehr Hologramm-Vibe
-- Local Graph Modus für die aktuell geöffnete Note
-
-## Hinweis
-
-Das Plugin nutzt `3d-force-graph`, `three` und `three-spritetext` und ist aktuell Desktop-only.
+Built with [3d-force-graph](https://github.com/vasturiano/3d-force-graph), [Three.js](https://threejs.org/), and [three-spritetext](https://github.com/vasturiano/three-spritetext).

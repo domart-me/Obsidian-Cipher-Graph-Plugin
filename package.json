@@ -1,19 +1,24 @@
 {
   "name": "cipher-graph-view",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A futuristic neon 3D graph view for Obsidian vaults.",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -noEmit -skipLibCheck && esbuild src/main.ts --bundle --external:obsidian --format=cjs --target=es2018 --outfile=main.js",
-    "dev": "esbuild src/main.ts --bundle --external:obsidian --format=cjs --target=es2018 --outfile=main.js --watch",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs --production",
+    "dev": "node esbuild.config.mjs",
     "version": "node version-bump.mjs && git add manifest.json versions.json"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["obsidian", "obsidian-plugin", "graph", "3d", "force-graph"],
+  "author": "Cipher / Dominic",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/domart-me/Obsidian-Cipher-Graph-Plugin"
+  },
   "type": "commonjs",
   "devDependencies": {
+    "@esbuild/darwin-arm64": "^0.28.0",
     "@types/node": "^25.6.2",
     "esbuild": "^0.28.0",
     "obsidian": "^1.12.3",
