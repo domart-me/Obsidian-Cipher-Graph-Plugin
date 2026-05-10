@@ -2,7 +2,7 @@
 
 A futuristic neon 3D graph view for Obsidian vaults.
 
-![Preview]()
+![Preview](screenshot.png)
 
 ## Features
 
