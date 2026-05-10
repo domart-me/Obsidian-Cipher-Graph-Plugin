@@ -13,7 +13,7 @@ A futuristic neon 3D graph view for Obsidian vaults.
 - Directional particles on links
 - Click a node to open the note
 - Auto-refresh on vault changes
-- Automatic light and dark mode support
+- Automatic light and dark mode
 
 ## Installation
 
@@ -46,3 +46,4 @@ npm run dev    # watch mode
 ## Credits
 
 Built with [3d-force-graph](https://github.com/vasturiano/3d-force-graph), [Three.js](https://threejs.org/), and [three-spritetext](https://github.com/vasturiano/three-spritetext).
+
