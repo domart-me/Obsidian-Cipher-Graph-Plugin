@@ -13,6 +13,7 @@ A futuristic neon 3D graph view for Obsidian vaults.
 - Directional particles on links
 - Click a node to open the note
 - Auto-refresh on vault changes
+- Automatic light and dark mode support
 
 ## Installation
 
